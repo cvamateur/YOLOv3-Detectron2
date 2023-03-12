@@ -1,27 +1,31 @@
 # YOLOv3-Detectron2
 
-A simple YOLOv3/YOLOv3-Tiny implementation on facebook's **Detectron2** framework. 
+A simple YOLOv3/YOLOv3-Tiny implementation on facebook's **Detectron2** framework.
+
+The project code uses official yolov3 [weights](https://pjreddie.com/darknet/yolo/) trained on COCO dataset to initiate model weights.
+
+
 
 ## Getting Started
 - Install **Detectron2** following official [installation instructions](https://detectron2.readthedocs.io/en/latest/tutorials/install.html).
-- Install YOLOv3-Detectron2
+- Install YOLOv3-Detectron2:
   ```
   python setup.py develop
   ```
   
-- Run inference
+- Run inference on custom image:
   ```
   # use YOLOv3 official weights 
   python tools/detect.py -i ./imgs/messi.jpg -o ./output/
   ```
   
-- Train
+- Use COCO pretrain weights to train YOLOv3 model on Pascal VOC dataset:
   ```
   # train on Pascal-VOC dataset
   python tools/train_net.py --config-file configs/PascalVOC-Detection/yolov3_stage1.yaml 
   ```
   
-- Generating anchor boxes on dataset
+- Generate anchors by k-means clustering:
   ```
   python tools/gen_anchors.py --config-file configs/gen_anc.yaml --n_clusters 9
   ```
