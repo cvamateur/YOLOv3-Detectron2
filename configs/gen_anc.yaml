@@ -1,0 +1,7 @@
+VERSION: 2
+DATASETS:
+  #TRAIN: ("voc_2007_trainval",)
+  #TRAIN: ("voc_2012_trainval",)
+  #TRAIN: ("coco_2017_train",)
+  TRAIN: ("voc_2007_trainval", "voc_2012_trainval")
+  #TRAIN: ("coco_2017_train", "voc_2007_trainval", "voc_2012_trainval")

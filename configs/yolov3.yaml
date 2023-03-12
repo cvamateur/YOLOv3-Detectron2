@@ -1,0 +1,35 @@
+VERSION: 2
+MODEL:
+  META_ARCHITECTURE: "YOLOV3"
+  BACKBONE:
+    NAME: "build_yolov3_backbone"
+    FREEZE_AT: 2
+  DARKNET:
+    NORM: "BN"
+    OUT_FEATURES: [ "res3", "res4", "res5" ]
+  YOLOV3_FPN:
+    IN_FEATURES: [ "res3", "res4", "res5" ]
+    LATERAL_OUT_CHANNELS: [ 128, 256, 512 ]
+    LATERAL_NUM_BLOCKS: [ 5, 5, 5 ]
+  WEIGHTS: "https://pjreddie.com/media/files/yolov3.weights"
+  YOLOV3:
+    HEAD_IN_FEATURES: [ "p3", "p4", "p5" ]
+    NUM_CLASSES: 80
+    TEST_CONF_THRESH: 0.25
+    TEST_TOPK_CANDIDATES: 1000
+    TEST_NMS_THRESH: 0.5
+    TEST_DETECTIONS_PER_IMAGE: 100
+    LOSS:
+      BBOX_REG_LOSS_TYPE: "smooth_l1"
+      REG_OBJ_TO_IOU: False
+      WEIGHT_OBJ: 1.0       # objectness loss weight
+      WEIGHT_NOOBJ: 100.0   # non-objectness loss weight
+      WEIGHT_CLS: 1.0       # classification loss weight
+      WEIGHT_BOX_REG: 2.0   # box regression loss weight
+  ANCHOR_GENERATOR:
+    NAME: "YOLOAnchorGenerator"
+    ANCHORS:
+      - [ 10, 13, 16, 30, 33, 23 ]        # p3/8
+      - [ 30, 61, 62, 45, 59, 119 ]       # p4/16
+      - [ 116, 90, 156, 198, 373, 326 ]   # p5/32
+

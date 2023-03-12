@@ -1,0 +1,34 @@
+VERSION: 2
+MODEL:
+  META_ARCHITECTURE: "YOLOV3"
+  BACKBONE:
+    NAME: "build_yolov3_tiny_backbone"
+    FREEZE_AT: 2
+  DARKNET:
+    NORM: "BN"
+    OUT_FEATURES: [ "res4", "res5" ]
+  YOLOV3_FPN:
+    IN_FEATURES: [ "res4", "res5" ]
+    LATERAL_OUT_CHANNELS: [ 0, 256 ]  # 0: channels will be set automatically
+    LATERAL_NUM_BLOCKS: [ 0, 1 ]      # 0: res4 has no lateral conv
+    OUTCONV_CHANNELS: [ 256, 512 ]
+  WEIGHTS: "https://pjreddie.com/media/files/yolov3-tiny.weights"
+  YOLOV3:
+    HEAD_IN_FEATURES: [ "p4", "p5" ]
+    NUM_CLASSES: 80
+    TEST_CONF_THRESH: 0.1
+    TEST_TOPK_CANDIDATES: 500
+    TEST_NMS_THRESH: 0.4
+    TEST_DETECTIONS_PER_IMAGE: 50
+    LOSS:
+      BBOX_REG_LOSS_TYPE: "smooth_l1"
+      REG_OBJ_TO_IOU: False
+      WEIGHT_OBJ: 1.0
+      WEIGHT_NOOBJ: 100.0
+      WEIGHT_CLS: 1.0
+      WEIGHT_BOX_REG: 2.0
+  ANCHOR_GENERATOR:
+    NAME: "YOLOAnchorGenerator"
+    ANCHORS:
+      - [ 10, 14, 23,  27, 37,  58 ]    # p4/16
+      - [ 81, 82, 135, 169, 344, 319 ]  # p5/32
