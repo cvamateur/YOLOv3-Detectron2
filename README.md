@@ -34,3 +34,6 @@ Load darknet official weights and evaluate mAP on COCO:
 |   YOLOv3-608    | 32.734 | 56.950 | 34.052 | 24.372 | 37.572 | 40.170 |
 | YOLOv3-Tiny-416 | 9.175  | 18.744 | 7.977  | 0.246  | 9.591  | 22.219 |
 
+
+### Detection Results
+<img src="./imgs/messi_det.jpg" alt="messi" style="zoom:80%;" />
