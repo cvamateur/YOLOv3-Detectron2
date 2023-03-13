@@ -8,12 +8,14 @@ import argparse
 import detectron2.data.transforms as T
 from detectron2.data import MetadataCatalog
 from detectron2.engine import default_setup
+from detectron2.utils.logger import setup_logger
 from detectron2.utils.video_visualizer import VideoVisualizer
 from detectron2.utils.visualizer import ColorMode, Visualizer
 from detectron2.modeling import build_model
 
 from yolov3.checkpoint import YOLOV3Checkpointer
 from yolov3.config import get_cfg
+
 
 
 class YOLOPredictor:
@@ -152,7 +154,7 @@ class VisualizationDemo(object):
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config-file", default="configs/COCO-Detection/yolov3.yaml")
+    parser.add_argument("--config-file", default="configs/yolov3.yaml")
     parser.add_argument("-i", "--input", required=True, help="Input image path")
     parser.add_argument("-o", "--output", help="Output directory.")
     parser.add_argument("--conf-threshold", type=float, default=0.25, help="Confidence threshold in YOLOv3.")
@@ -162,18 +164,21 @@ def get_args():
 def main(args):
     cfg = get_cfg()
     cfg.merge_from_file(args.config_file)
-    default_setup(cfg, args)
+
+    logger = setup_logger(cfg.OUTPUT_DIR)
 
     demo = VisualizationDemo(cfg)
     image = cv2.imread(args.input, cv2.IMREAD_COLOR)
     predictions, visualized_output = demo.run_on_image(image)
     detected_image = visualized_output.get_image()[:, :, ::-1]
 
-    if args.output:
-        os.makedirs(args.output, exist_ok=True)
-        filename = os.path.basename(args.input)
-        filename = os.path.join(args.output, filename)
+    output_dir = args.output or cfg.OUTPUT_DIR
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
+        filename, ext = os.path.basename(args.input).split('.')
+        filename = os.path.join(output_dir, f"{filename}_det.{ext}")
         cv2.imwrite(filename, detected_image)
+        logger.info("Detection result are saved: %s" % filename)
 
     cv2.namedWindow("Image", cv2.WINDOW_NORMAL)
     cv2.imshow("Image", detected_image)
