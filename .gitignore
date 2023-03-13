@@ -139,5 +139,5 @@ cython_debug/
 
 .idea
 datasets
-output
+output*
 build
