@@ -32,7 +32,10 @@ MODEL:
       - [ 10, 13, 16, 30, 33, 23 ]        # p3/8
       - [ 30, 61, 62, 45, 59, 119 ]       # p4/16
       - [ 116, 90, 156, 198, 373, 326 ]   # p5/32
+DATASETS:
+  TRAIN: ("coco_2017_train",)
+  TEST: ("coco_2017_val",)
 INPUT:
   FORMAT: "RGB"
   MIN_SIZE_TRAIN: (320, 352, 384, 416, 448, 480, 512, 544, 576, 608)
-  MIN_SIZE_TEST: 608
+  MIN_SIZE_TEST: 448

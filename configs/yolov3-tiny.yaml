@@ -32,6 +32,9 @@ MODEL:
     ANCHORS:
       - [ 10, 14, 23,  27, 37,  58 ]    # p4/16
       - [ 81, 82, 135, 169, 344, 319 ]  # p5/32
+DATASETS:
+  TRAIN: ("coco_2017_train",)
+  TEST: ("coco_2017_val",)
 INPUT:
   FORMAT: "RGB"
   MIN_SIZE_TRAIN: (320, 352, 384, 416, 448, 480, 512)
