@@ -1,10 +1,66 @@
 from detectron2.config.defaults import _C
 from detectron2.config import CfgNode as CN
 
+
 _C.MODEL.META_ARCHITECTURE = "YOLOV3"
-_C.MODEL.PIXEL_MEAN = [0.0] * 3
-_C.MODEL.PIXEL_STD = [255.0] * 3
+_C.MODEL.PIXEL_MEAN = [0., 0., 0.]
+_C.MODEL.PIXEL_STD = [255., 255., 255.]
+
 _C.INPUT.FORMAT = "RGB"
+_C.INPUT.BORDER_VALUE = (114, 114, 114)
+_C.INPUT.USE_YOLO_AUG = False
+
+# -----------------------------------------------------------------------------
+# Random Crop
+# -----------------------------------------------------------------------------
+_C.INPUT.CROP.ENABLED = False
+_C.INPUT.CROP.TYPE = "relative_range"
+_C.INPUT.CROP.SIZE = [0.9, 0.9]
+
+# -----------------------------------------------------------------------------
+# Resize Shortest Edge
+# -----------------------------------------------------------------------------
+_C.INPUT.MIN_SIZE_TRAIN = (640,)
+_C.INPUT.MIN_SIZE_TRAIN_SAMPLING = "choice"
+_C.INPUT.MAX_SIZE_TRAIN = 1333
+_C.INPUT.MIN_SIZE_TEST = 608
+_C.INPUT.MAX_SIZE_TEST = 608
+_C.INPUT.RANDOM_FLIP = "horizontal"
+
+# -----------------------------------------------------------------------------
+# YOLO AUG: Jitter Shift
+# -----------------------------------------------------------------------------
+_C.INPUT.JITTER_SHIFT = CN()
+_C.INPUT.JITTER_SHIFT.ENABLED = False
+_C.INPUT.JITTER_SHIFT.MAX_PIXELS = 32
+
+# -----------------------------------------------------------------------------
+# YOLO AUG: Jitter Color
+# -----------------------------------------------------------------------------
+_C.INPUT.JITTER_COLOR = CN()
+_C.INPUT.JITTER_COLOR.ENABLED = False
+_C.INPUT.JITTER_COLOR.HSV_H = 0.015
+_C.INPUT.JITTER_COLOR.HSV_S = 0.7
+_C.INPUT.JITTER_COLOR.HSV_V = 0.4
+
+# -----------------------------------------------------------------------------
+# YOLO AUG: Random Perspective
+# -----------------------------------------------------------------------------
+_C.INPUT.RANDOM_PERSPECTIVE = CN()
+_C.INPUT.RANDOM_PERSPECTIVE.ENABLED = False
+_C.INPUT.RANDOM_PERSPECTIVE.DEGREES = 0.0
+_C.INPUT.RANDOM_PERSPECTIVE.TRANSLATE = 0.1
+_C.INPUT.RANDOM_PERSPECTIVE.SCALE = 0.5
+_C.INPUT.RANDOM_PERSPECTIVE.SHEER = 0.0
+_C.INPUT.RANDOM_PERSPECTIVE.PERSPECTIVE = 0.0
+
+# -----------------------------------------------------------------------------
+# YOLO AUG: Mosaic Transform
+# -----------------------------------------------------------------------------
+_C.INPUT.MOSAIC = CN()
+_C.INPUT.MOSAIC.ENABLED = False
+_C.INPUT.MOSAIC.PATCH_SIZE = 640  # single image size
+_C.INPUT.MOSAIC.POOL_SIZE = 1000
 
 # -----------------------------------------------------------------------------
 # Solver
@@ -41,6 +97,7 @@ _C.MODEL.YOLOV3_FPN.OUTCONV_CHANNELS = [0] * 3  # 0: out = 2 * lateral_out
 # ---------------------------------------------------------------------------- #
 _C.MODEL.YOLOV3 = CN()
 _C.MODEL.YOLOV3.HEAD_IN_FEATURES = ["p3", "p4", "p5"]  # tiny: ["p4", "p5"]
+_C.MODEL.YOLOV3.MAX_STRIDE = 32  # used in letterbox
 _C.MODEL.YOLOV3.NUM_CLASSES = 80
 _C.MODEL.YOLOV3.TEST_CONF_THRESH = 0.05
 _C.MODEL.YOLOV3.TEST_TOPK_CANDIDATES = 1000

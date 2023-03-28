@@ -1,4 +1,5 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
+import glob
 import os
 
 import cv2
@@ -16,6 +17,8 @@ from detectron2.modeling import build_model
 from yolov3.checkpoint import YOLOV3Checkpointer
 from yolov3.config import get_cfg
 
+
+logger = None
 
 
 class YOLOPredictor:
@@ -161,21 +164,15 @@ def get_args():
     return parser
 
 
-def main(args):
-    cfg = get_cfg()
-    cfg.merge_from_file(args.config_file)
-
-    logger = setup_logger(cfg.OUTPUT_DIR)
-
-    demo = VisualizationDemo(cfg)
-    image = cv2.imread(args.input, cv2.IMREAD_COLOR)
+def detect_single_image(demo, image_path, output_dir=""):
+    image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+    assert image is not None
     predictions, visualized_output = demo.run_on_image(image)
     detected_image = visualized_output.get_image()[:, :, ::-1]
 
-    output_dir = args.output or cfg.OUTPUT_DIR
     if output_dir:
         os.makedirs(output_dir, exist_ok=True)
-        filename, ext = os.path.basename(args.input).split('.')
+        filename, ext = os.path.basename(image_path).split('.')
         filename = os.path.join(output_dir, f"{filename}_det.{ext}")
         cv2.imwrite(filename, detected_image)
         logger.info("Detection result are saved: %s" % filename)
@@ -184,6 +181,24 @@ def main(args):
     cv2.imshow("Image", detected_image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+
+def main(args):
+    global logger
+
+    cfg = get_cfg()
+    cfg.merge_from_file(args.config_file)
+    logger = setup_logger(cfg.OUTPUT_DIR)
+    if not os.path.exists(args.input):
+        logger.error("path not exists: %s" % args.input)
+    output_dir = args.output or cfg.OUTPUT_DIR
+
+    demo = VisualizationDemo(cfg)
+    if os.path.isdir(args.input):
+        for image_path in glob.glob(os.path.join(args.input, "*.jpg")):
+            detect_single_image(demo, image_path, output_dir)
+    else:
+        detect_single_image(demo, args.input, output_dir)
 
 
 if __name__ == '__main__':

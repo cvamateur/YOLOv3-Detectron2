@@ -38,6 +38,8 @@ from detectron2.evaluation import (
 
 from yolov3.config import get_cfg
 from yolov3.checkpoint import YOLOV3Checkpointer
+from yolov3.data import YOLODatasetMapper
+
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +56,12 @@ class Trainer(DefaultTrainer):
         model = self.checkpointer.model
         self.checkpointer = YOLOV3Checkpointer(
             model, save_dir=cfg.OUTPUT_DIR, trainer=weakref.proxy(self))
+
+    @classmethod
+    def build_train_loader(cls, cfg):
+        from detectron2.data import build_detection_train_loader
+        mapper = YOLODatasetMapper(cfg, True)
+        return build_detection_train_loader(cfg, mapper=mapper)
 
     @classmethod
     def build_evaluator(cls, cfg, dataset_name, output_folder=None):
