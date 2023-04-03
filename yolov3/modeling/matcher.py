@@ -74,7 +74,7 @@ class MaxIoUMatcher(object):
         # In case that max-iou < 0.3, then ignore that gt
         if not self.allow_low_quality_matches:
             match_labels[matched_vals < 0.3] = 0
-        return matches, match_labels
+        return matches, match_labels,
 
 
 def _pairwise_l1_distances(boxes1: Boxes, boxes2: Boxes):

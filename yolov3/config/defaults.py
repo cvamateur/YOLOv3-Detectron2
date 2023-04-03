@@ -24,7 +24,7 @@ _C.INPUT.MIN_SIZE_TRAIN = (640,)
 _C.INPUT.MIN_SIZE_TRAIN_SAMPLING = "choice"
 _C.INPUT.MAX_SIZE_TRAIN = 1333
 _C.INPUT.MIN_SIZE_TEST = 608
-_C.INPUT.MAX_SIZE_TEST = 608
+_C.INPUT.MAX_SIZE_TEST = 1333
 _C.INPUT.RANDOM_FLIP = "horizontal"
 
 # -----------------------------------------------------------------------------
